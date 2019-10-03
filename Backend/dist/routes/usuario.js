@@ -7,7 +7,9 @@ const usuario_model_1 = require("./../models/usuario.model");
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const token_1 = __importDefault(require("../classes/token"));
+const authentication_1 = require("../middlewares/authentication");
 const userRoutes = express_1.Router();
+//Login user
 userRoutes.post('/login', (req, res) => {
     const body = req.body;
     usuario_model_1.Usuario.findOne({ email: body.email }, (err, userDB) => {
@@ -64,6 +66,13 @@ userRoutes.post('/create', (req, res) => {
             error: true,
             message: err
         });
+    });
+});
+// Update user
+userRoutes.post('/update', authentication_1.checkToken, (req, res) => {
+    res.json({
+        error: false,
+        usuario: req.usuario
     });
 });
 exports.default = userRoutes;

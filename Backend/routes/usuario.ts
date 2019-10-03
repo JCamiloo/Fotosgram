@@ -2,9 +2,11 @@ import { Usuario } from './../models/usuario.model';
 import { Router, Request, Response } from "express";
 import bcrypt from 'bcrypt'; 
 import Token from '../classes/token';
+import { checkToken } from '../middlewares/authentication';
 
 const userRoutes = Router();
 
+//Login user
 userRoutes.post('/login', (req: Request, res: Response) => {
     const body = req.body;
     Usuario.findOne({ email: body.email }, (err, userDB) => {
@@ -66,6 +68,14 @@ userRoutes.post('/create', (req: Request, res: Response) => {
             error: true,
             message: err
         });
+    });
+});
+
+// Update user
+userRoutes.post('/update', checkToken, (req: any, res: Response) => {
+    res.json({
+        error: false,
+        usuario: req.usuario
     });
 });
 
