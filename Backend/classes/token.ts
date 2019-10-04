@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 export default class Token {
 
     private static seed: string = 'app-secret';
-    private static expiration: string = '30d';
+    private static expiration: string = '1d';
 
     static getJwtToken(payload: any): string {
         return jwt.sign({ usuario: payload }, this.seed, { expiresIn: this.expiration });

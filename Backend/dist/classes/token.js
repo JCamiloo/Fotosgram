@@ -22,5 +22,5 @@ class Token {
     }
 }
 Token.seed = 'app-secret';
-Token.expiration = '30d';
+Token.expiration = '1d';
 exports.default = Token;
