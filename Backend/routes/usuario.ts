@@ -14,7 +14,7 @@ userRoutes.post('/login', (req: Request, res: Response) => {
 
         if (!userDB){
             return res.json({
-                error: true,
+                success: false,
                 message: 'User/password invalids'
             });
         }
@@ -28,13 +28,13 @@ userRoutes.post('/login', (req: Request, res: Response) => {
             });
 
             res.json({
-                error: false,
+                success: true,
                 data: tokenUser,
             });
         } else {
             res.json({
-                error: true,
-                mensaje: 'User/password invalids*'
+                success: false,
+                message: 'User/password invalids*'
             });
         }
     });

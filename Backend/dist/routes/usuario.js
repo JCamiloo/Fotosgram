@@ -17,7 +17,7 @@ userRoutes.post('/login', (req, res) => {
             throw err;
         if (!userDB) {
             return res.json({
-                error: true,
+                success: false,
                 message: 'User/password invalids'
             });
         }
@@ -29,14 +29,14 @@ userRoutes.post('/login', (req, res) => {
                 avatar: userDB.avatar
             });
             res.json({
-                error: false,
+                success: true,
                 data: tokenUser,
             });
         }
         else {
             res.json({
-                error: true,
-                mensaje: 'User/password invalids*'
+                success: false,
+                message: 'User/password invalids*'
             });
         }
     });
