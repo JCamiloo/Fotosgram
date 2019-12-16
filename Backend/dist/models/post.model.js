@@ -4,7 +4,7 @@ const mongoose_1 = require("mongoose");
 const postSchema = new mongoose_1.Schema({
     created: { type: Date },
     mensaje: { type: String },
-    img: [{ type: String }],
+    imgs: [{ type: String }],
     coords: [{ type: String }],
     usuario: {
         type: mongoose_1.Schema.Types.ObjectId,

@@ -17,6 +17,24 @@ export default class FileSystem {
         });
     }
 
+    tempToPostImages(userId: string) {
+        const tempPath = path.resolve(__dirname, '../uploads/', userId, 'temp');
+        const postPath = path.resolve(__dirname, '../uploads/', userId, 'post');
+
+        if (!fs.existsSync(tempPath)) {
+            return [];
+        }
+
+        if (!fs.existsSync(postPath)) {
+            fs.mkdirSync(postPath);
+        }
+
+        const tempImages = this.getTempImages(userId);
+        tempImages.forEach(image => fs.renameSync(`${tempPath}/${image}`, `${postPath}/${image}`));
+
+        return tempImages;
+    }
+
     private createUnicName(originalName: string) {
         const arrayName = originalName.split('.');
         const extension = arrayName[ arrayName.length - 1 ];
@@ -35,5 +53,10 @@ export default class FileSystem {
         }
 
         return tempUserPath;
+    }
+
+    private getTempImages(userId: string) {
+        const tempPath = path.resolve(__dirname, '../uploads/', userId, 'temp');
+        return fs.readdirSync(tempPath) || [];
     }
 }

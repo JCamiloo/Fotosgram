@@ -18,6 +18,19 @@ class FileSystem {
             });
         });
     }
+    tempToPostImages(userId) {
+        const tempPath = path_1.default.resolve(__dirname, '../uploads/', userId, 'temp');
+        const postPath = path_1.default.resolve(__dirname, '../uploads/', userId, 'post');
+        if (!fs_1.default.existsSync(tempPath)) {
+            return [];
+        }
+        if (!fs_1.default.existsSync(postPath)) {
+            fs_1.default.mkdirSync(postPath);
+        }
+        const tempImages = this.getTempImages(userId);
+        tempImages.forEach(image => fs_1.default.renameSync(`${tempPath}/${image}`, `${postPath}/${image}`));
+        return tempImages;
+    }
     createUnicName(originalName) {
         const arrayName = originalName.split('.');
         const extension = arrayName[arrayName.length - 1];
@@ -33,6 +46,10 @@ class FileSystem {
             fs_1.default.mkdirSync(tempUserPath);
         }
         return tempUserPath;
+    }
+    getTempImages(userId) {
+        const tempPath = path_1.default.resolve(__dirname, '../uploads/', userId, 'temp');
+        return fs_1.default.readdirSync(tempPath) || [];
     }
 }
 exports.default = FileSystem;

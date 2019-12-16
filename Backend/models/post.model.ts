@@ -3,7 +3,7 @@ import { Schema, Document, model } from 'mongoose';
 const postSchema = new Schema({
     created: { type: Date },
     mensaje: { type: String },
-    img: [{ type: String }],
+    imgs: [{ type: String }],
     coords: [{ type: String }],
     usuario: { 
         type: Schema.Types.ObjectId,
