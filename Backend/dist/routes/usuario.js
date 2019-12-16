@@ -9,6 +9,14 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const token_1 = __importDefault(require("../classes/token"));
 const authentication_1 = require("../middlewares/authentication");
 const userRoutes = express_1.Router();
+//Check user
+userRoutes.get('/', authentication_1.checkToken, (req, res) => {
+    const user = req.usuario;
+    res.json({
+        success: true,
+        data: { user }
+    });
+});
 //Login user
 userRoutes.post('/login', (req, res) => {
     const body = req.body;

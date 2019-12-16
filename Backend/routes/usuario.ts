@@ -6,6 +6,15 @@ import { checkToken } from '../middlewares/authentication';
 
 const userRoutes = Router();
 
+//Check user
+userRoutes.get('/', checkToken, (req: any, res: Response) => {
+    const user = req.usuario;
+    res.json({
+        success: true,
+        data: { user }
+    });
+});
+
 //Login user
 userRoutes.post('/login', (req: Request, res: Response) => {
     const body = req.body;
