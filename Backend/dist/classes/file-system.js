@@ -20,7 +20,7 @@ class FileSystem {
     }
     tempToPostImages(userId) {
         const tempPath = path_1.default.resolve(__dirname, '../uploads/', userId, 'temp');
-        const postPath = path_1.default.resolve(__dirname, '../uploads/', userId, 'post');
+        const postPath = path_1.default.resolve(__dirname, '../uploads/', userId, 'posts');
         if (!fs_1.default.existsSync(tempPath)) {
             return [];
         }
@@ -30,6 +30,14 @@ class FileSystem {
         const tempImages = this.getTempImages(userId);
         tempImages.forEach(image => fs_1.default.renameSync(`${tempPath}/${image}`, `${postPath}/${image}`));
         return tempImages;
+    }
+    getPhotoUrl(userId, img) {
+        const photoPath = path_1.default.resolve(__dirname, '../uploads/', userId, 'posts', img);
+        const exist = fs_1.default.existsSync(photoPath);
+        if (!exist) {
+            return path_1.default.resolve(__dirname, '../assets/default.jpg');
+        }
+        return photoPath;
     }
     createUnicName(originalName) {
         const arrayName = originalName.split('.');

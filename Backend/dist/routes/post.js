@@ -18,7 +18,7 @@ const file_system_1 = __importDefault(require("../classes/file-system"));
 const postRoutes = express_1.Router();
 const fileSystem = new file_system_1.default();
 //Get POST
-postRoutes.get('/', [authentication_1.checkToken], (req, res) => __awaiter(this, void 0, void 0, function* () {
+postRoutes.get('/', authentication_1.checkToken, (req, res) => __awaiter(this, void 0, void 0, function* () {
     const pagina = Number(req.query.pagina) || 1;
     const skip = (pagina - 1) * 10;
     const post = yield post_model_1.Post.find()
@@ -36,7 +36,7 @@ postRoutes.get('/', [authentication_1.checkToken], (req, res) => __awaiter(this,
     });
 }));
 //Create POST
-postRoutes.post('/', [authentication_1.checkToken], (req, res) => {
+postRoutes.post('/', authentication_1.checkToken, (req, res) => {
     const body = req.body;
     body.usuario = req.usuario._id;
     const images = fileSystem.tempToPostImages(req.usuario._id);
@@ -55,7 +55,7 @@ postRoutes.post('/', [authentication_1.checkToken], (req, res) => {
     });
 });
 //Upload files
-postRoutes.post('/upload', [authentication_1.checkToken], (req, res) => __awaiter(this, void 0, void 0, function* () {
+postRoutes.post('/upload', authentication_1.checkToken, (req, res) => __awaiter(this, void 0, void 0, function* () {
     if (!req.files) {
         return res.status(400).json({
             success: false,
@@ -81,4 +81,10 @@ postRoutes.post('/upload', [authentication_1.checkToken], (req, res) => __awaite
         file: file.mimetype
     });
 }));
+postRoutes.get('/image/:userId/:img', authentication_1.checkToken, (req, res) => {
+    const userId = req.params.userId;
+    const img = req.params.img;
+    const photoPath = fileSystem.getPhotoUrl(userId, img);
+    res.sendFile(photoPath);
+});
 exports.default = postRoutes;

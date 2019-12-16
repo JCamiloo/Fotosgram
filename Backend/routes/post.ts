@@ -8,7 +8,7 @@ const postRoutes = Router();
 const fileSystem = new FileSystem();
 
 //Get POST
-postRoutes.get('/', [checkToken], async (req: any, res: Response) => {
+postRoutes.get('/', checkToken, async (req: any, res: Response) => {
     const pagina = Number(req.query.pagina) || 1;
     const skip = (pagina - 1) * 10;
 
@@ -28,12 +28,12 @@ postRoutes.get('/', [checkToken], async (req: any, res: Response) => {
 });
 
 //Create POST
-postRoutes.post('/', [checkToken], (req: any, res: Response) => {
+postRoutes.post('/', checkToken, (req: any, res: Response) => {
     const body = req.body;
     body.usuario = req.usuario._id;
     const images = fileSystem.tempToPostImages(req.usuario._id);
     body.imgs = images;
-    
+
     Post.create(body).then(async postDB => {
         await postDB.populate('usuario', '-password').execPopulate();
         res.json({
@@ -49,7 +49,7 @@ postRoutes.post('/', [checkToken], (req: any, res: Response) => {
 });
 
 //Upload files
-postRoutes.post('/upload', [checkToken], async (req: any, res: Response) => {
+postRoutes.post('/upload', checkToken, async (req: any, res: Response) => {
     if (!req.files) {
         return res.status(400).json({
             success: false,
@@ -80,6 +80,14 @@ postRoutes.post('/upload', [checkToken], async (req: any, res: Response) => {
         success: true,
         file: file.mimetype
     });
+});
+
+postRoutes.get('/image/:userId/:img', checkToken, (req: any, res: Response) => {
+    const userId = req.params.userId;
+    const img = req.params.img;
+    const photoPath = fileSystem.getPhotoUrl(userId, img);
+
+    res.sendFile(photoPath);
 });
 
 export default postRoutes;
