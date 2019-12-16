@@ -8,7 +8,7 @@ export const checkToken = (req: any, res: Response, next: NextFunction) => {
         next();
     }).catch(err => {
         res.json({
-            error: true,
+            success: false,
             message: 'Invalid token'
         });
     });

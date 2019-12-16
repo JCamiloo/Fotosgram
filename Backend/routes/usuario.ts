@@ -29,7 +29,7 @@ userRoutes.post('/login', (req: Request, res: Response) => {
 
             res.json({
                 success: true,
-                data: tokenUser,
+                data: { token: tokenUser },
             });
         } else {
             res.json({
@@ -50,7 +50,6 @@ userRoutes.post('/create', (req: Request, res: Response) => {
     }
 
     Usuario.create(user).then(userDB => {
-
         const tokenUser = Token.getJwtToken({
             _id: userDB._id,
             nombre: userDB.nombre,
@@ -59,13 +58,13 @@ userRoutes.post('/create', (req: Request, res: Response) => {
         });
 
         res.json({
-            error: false,
+            success: true,
             message: 'User created',
-            data: tokenUser
+            data: { token: tokenUser}
         });
     }).catch(err => {
         res.json({
-            error: true,
+            success: false,
             message: err
         });
     });
@@ -82,24 +81,17 @@ userRoutes.post('/update', checkToken, (req: any, res: Response) => {
 
     Usuario.findByIdAndUpdate(req.usuario._id, user, {new: true}, (err, userDB) => {
         if(err) throw err;
+
         if(!userDB){
             return res.json({
-                error: true,
+                success: false,
                 message: 'User does not exist.'
             });
         }
-        console.log('userdb', userDB);
-        const tokenUser = Token.getJwtToken({
-            _id: userDB._id,
-            nombre: userDB.nombre,
-            email: userDB.email,
-            avatar: userDB.avatar
-        });
 
         res.json({
-            error: false,
-            message: 'User updated',
-            data: tokenUser
+            success: true,
+            message: 'User updated'
         });
     });
 });

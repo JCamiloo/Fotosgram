@@ -30,7 +30,7 @@ userRoutes.post('/login', (req, res) => {
             });
             res.json({
                 success: true,
-                data: tokenUser,
+                data: { token: tokenUser },
             });
         }
         else {
@@ -57,13 +57,13 @@ userRoutes.post('/create', (req, res) => {
             avatar: userDB.avatar
         });
         res.json({
-            error: false,
+            success: true,
             message: 'User created',
-            data: tokenUser
+            data: { token: tokenUser }
         });
     }).catch(err => {
         res.json({
-            error: true,
+            success: false,
             message: err
         });
     });
@@ -80,21 +80,13 @@ userRoutes.post('/update', authentication_1.checkToken, (req, res) => {
             throw err;
         if (!userDB) {
             return res.json({
-                error: true,
+                success: false,
                 message: 'User does not exist.'
             });
         }
-        console.log('userdb', userDB);
-        const tokenUser = token_1.default.getJwtToken({
-            _id: userDB._id,
-            nombre: userDB.nombre,
-            email: userDB.email,
-            avatar: userDB.avatar
-        });
         res.json({
-            error: false,
-            message: 'User updated',
-            data: tokenUser
+            success: true,
+            message: 'User updated'
         });
     });
 });

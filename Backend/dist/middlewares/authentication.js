@@ -11,7 +11,7 @@ exports.checkToken = (req, res, next) => {
         next();
     }).catch(err => {
         res.json({
-            error: true,
+            success: false,
             message: 'Invalid token'
         });
     });

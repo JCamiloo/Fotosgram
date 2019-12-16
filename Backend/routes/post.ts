@@ -1,12 +1,14 @@
 import { Router, Response } from 'express';
 import { checkToken } from '../middlewares/authentication';
 import { Post } from './../models/post.model';
+import { FileUpload } from '../interfaces/file.interface';
+import FileSystem from '../classes/file-system';
 
 const postRoutes = Router();
+const fileSystem = new FileSystem();
 
 //Get POST
 postRoutes.get('/', [checkToken], async (req: any, res: Response) => {
-
     const pagina = Number(req.query.pagina) || 1;
     const skip = (pagina - 1) * 10;
 
@@ -44,5 +46,38 @@ postRoutes.post('/', [checkToken], (req: any, res: Response) => {
     });
 });
 
+//Upload files
+postRoutes.post('/upload', [checkToken], async (req: any, res: Response) => {
+    if (!req.files) {
+        return res.status(400).json({
+            success: false,
+            message: 'No file uploaded'
+        });
+    }
+
+    const file: FileUpload = req.files.image;
+
+
+    if (!file) {
+        return res.status(400).json({
+            success: false,
+            message: 'No file detected'
+        });
+    }
+
+    if (!file.mimetype.includes('image')) {
+        return res.status(400).json({
+            success: false,
+            message: 'No image detected'
+        });
+    }
+
+    await fileSystem.saveTempImage(file, req.usuario._id);
+    
+    res.json({
+        success: true,
+        file: file.mimetype
+    });
+});
 
 export default postRoutes;
