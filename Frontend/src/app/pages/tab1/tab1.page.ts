@@ -10,6 +10,7 @@ import { Post } from 'src/app/interfaces/interfaces';
 export class Tab1Page implements OnInit {
 
   posts: Post[] = [];
+  enableInfiniteScroll = true;
 
   constructor(private postService: PostService) {}
 
@@ -17,11 +18,17 @@ export class Tab1Page implements OnInit {
     this.loadPosts();
   }
 
-  loadPosts(event?) {
-    this.postService.getPosts().subscribe(resp => {
+  doRefresh(event) {
+    this.loadPosts(event, true);
+    this.posts = [];
+    this.enableInfiniteScroll = true;
+  }
+
+  loadPosts(event?, pull: boolean = false) {
+    this.postService.getPosts(pull).subscribe(resp => {
       this.posts.push(...resp.data.posts);
         event && event.target.complete(); 
-        (resp.data.posts.length === 0) && (event.target.disabled = true);
+        (resp.data.posts.length === 0) && (this.enableInfiniteScroll = false);
     });
   }
 }

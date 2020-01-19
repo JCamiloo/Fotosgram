@@ -10,8 +10,15 @@
 </ion-header>
 
 <ion-content color="light">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" pullFactor="0.8" pullMin="60" pullMax="120">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <app-posts [posts]="posts" ></app-posts>
-  <ion-infinite-scroll threshold="150px" (ionInfinite)="loadPosts($event)">
+
+  <ion-infinite-scroll [disabled]="!enableInfiniteScroll" 
+                       threshold="150px" 
+                       (ionInfinite)="loadPosts($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
       loadingText="Cargando...">
