@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { IonSlides } from '@ionic/angular';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -46,15 +47,21 @@ export class LoginPage implements OnInit {
       selected: false
     },
   ];
+  loginForm: FormGroup;
 
-  constructor() { }
+  constructor(private userSrv: UserService, private formBuilder: FormBuilder) { 
+    this.loginForm = this.formBuilder.group({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    });
+  }
 
   ngOnInit() {
     this.mainSlide.lockSwipes(true);
   }
 
-  login(loginForm: NgForm) {
-
+  login() {
+    this.userSrv.login(this.loginForm.getRawValue());
   }
 
   register(registerForm: NgForm) {

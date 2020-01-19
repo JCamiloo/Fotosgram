@@ -1,0 +1,8 @@
+{
+  "appId": "com.fotosgram.app",
+  "appName": "Fotosgram",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}
