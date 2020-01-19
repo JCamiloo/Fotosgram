@@ -1,5 +1,5 @@
 <ion-content>
-  <ion-slides class="mainSlide">
+  <ion-slides class="mainSlide" #mainSlide>
     <ion-slide>
       <form (ngSubmit)="login(loginForm)" #loginForm="ngForm">
         <ion-grid fixed>
@@ -36,7 +36,7 @@
               <ion-button type="submit"
                           color="tertiary"
                           shape="round">
-                Login
+                Ingresar
               </ion-button>
             </ion-col>
           </ion-row>
@@ -115,26 +115,20 @@
 
 <ion-footer no-border>
   <ion-toolbar>
-    <ion-row>
-      <ion-col>
-          <ion-button shape="round"
-                      expand="full"
-                      size="small"
-                      fill="outline"
-                      color="tertiary">
-            Ingresar
-          </ion-button>
-      </ion-col>
+      <ion-button *ngIf="showLoginButton"
+                  expand="full"
+                  fill="outline"
+                  color="tertiary"
+                  (click)="showLogin()">
+        Ingresar
+      </ion-button>
 
-      <ion-col>
-        <ion-button shape="round"
-                    expand="full"
-                    size="small"
-                    fill="outline"
-                    color="tertiary">
-          Registrarme
-        </ion-button>
-      </ion-col>
-    </ion-row>
+      <ion-button *ngIf="!showLoginButton"
+                  expand="full"
+                  fill="outline"
+                  color="tertiary"
+                  (click)="showRegister()">
+        Registrarme
+      </ion-button>
   </ion-toolbar>
 </ion-footer>
