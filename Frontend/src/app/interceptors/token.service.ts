@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class TokenService implements HttpInterceptor {
 
-  token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7Il9pZCI6IjVkOTU2OTMxYmZlNDQ2MTVkYzI0ZmM4MiIsIm5vbWJyZSI6Ikp1YW4gT3NvcmlvIiwiZW1haWwiOiJqdWFuQGdtYWlsLmNvbSIsImF2YXRhciI6ImF2Mi5wbmcifSwiaWF0IjoxNTc3MzI2OTQ0LCJleHAiOjE1Nzc0MTMzNDR9.9k2bS0i30Lw1JVWDjw_ueguRYCM1tNH2g3Zg0ou4Rbw';
+  token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7Il9pZCI6IjVkOTU2OTMxYmZlNDQ2MTVkYzI0ZmM4MiIsIm5vbWJyZSI6Ikp1YW4gT3NvcmlvIiwiZW1haWwiOiJqdWFuQGdtYWlsLmNvbSIsImF2YXRhciI6ImF2Mi5wbmcifSwiaWF0IjoxNTc5NDAyMTEwLCJleHAiOjE1Nzk0ODg1MTB9.Qtbzto8He9AnUUMmEJtS2ED_iBCdnHgAw6N4ehqe-ho';
 
   constructor() { }
 
