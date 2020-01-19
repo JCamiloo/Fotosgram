@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { IonSlides } from '@ionic/angular';
+import { IonSlides, NavController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-login',
@@ -49,7 +50,10 @@ export class LoginPage implements OnInit {
   ];
   loginForm: FormGroup;
 
-  constructor(private userSrv: UserService, private formBuilder: FormBuilder) { 
+  constructor(private userSrv: UserService, 
+              private formBuilder: FormBuilder,
+              private navCtrl: NavController,
+              private utilsSrv: UtilsService) { 
     this.loginForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -60,8 +64,14 @@ export class LoginPage implements OnInit {
     this.mainSlide.lockSwipes(true);
   }
 
-  login() {
-    this.userSrv.login(this.loginForm.getRawValue());
+  async login() {
+    const valid = await this.userSrv.login(this.loginForm.getRawValue());
+    console.log(valid);
+    if (valid) {
+      this.navCtrl.navigateRoot('/main/tabs/tab1', { animated: true });
+    } else {
+      this.utilsSrv.createToast('Usuario/Contrañesa inválidos');
+    }
   }
 
   register(registerForm: NgForm) {
