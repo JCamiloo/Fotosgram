@@ -12,42 +12,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 export class LoginPage implements OnInit {
 
   @ViewChild('mainSlide', {static: true}) mainSlide: IonSlides;
-  avatarSlide = { slidesPerView: 3.5 };
   showLoginButton = false;
-  avatars = [
-    {
-      img: 'av-1.png',
-      selected: true
-    },
-    {
-      img: 'av-2.png',
-      selected: false
-    },
-    {
-      img: 'av-3.png',
-      selected: false
-    },
-    {
-      img: 'av-4.png',
-      selected: false
-    },
-    {
-      img: 'av-5.png',
-      selected: false
-    },
-    {
-      img: 'av-6.png',
-      selected: false
-    },
-    {
-      img: 'av-7.png',
-      selected: false
-    },
-    {
-      img: 'av-8.png',
-      selected: false
-    },
-  ];
   loginForm: FormGroup;
   registerForm: FormGroup;
 
@@ -94,12 +59,6 @@ export class LoginPage implements OnInit {
     this.mainSlide.lockSwipes(true);
   }
 
-  selectAvatar(avatar) {
-    this.avatars.forEach(av => av.selected = false);
-    avatar.selected = true;
-    this.registerForm.get('avatar').setValue(avatar.img);
-  }
-
   initForms() {
     this.loginForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -112,5 +71,9 @@ export class LoginPage implements OnInit {
       name: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)])
     });
+  }
+
+  get avatarField() {
+    return this.registerForm.get('avatar');
   }
 }

@@ -48,26 +48,8 @@
 
     <ion-slide>
       <ion-grid fixed>
-        <ion-row>
-          <ion-col>
-              <h3>Seleccione un avatar</h3>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col>
-            <ion-slides [options]="avatarSlide">
-              <ion-slide *ngFor="let avatar of avatars">
-                <ion-img class="pick-avatar" 
-                         src="/assets/avatars/{{ avatar.img }}"
-                         [ngClass]="{ 'pick-avatar-selected': avatar.selected }"
-                         (click)="selectAvatar(avatar)">
-                </ion-img>
-              </ion-slide>
-            </ion-slides>
-          </ion-col>
-        </ion-row>
-      
+        <app-avatar-selector (avatarSelected)="avatarField.setValue($event)">
+        </app-avatar-selector>
         <form (ngSubmit)="register()" [formGroup]="registerForm">
           <ion-row>
             <ion-col>
