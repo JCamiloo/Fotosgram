@@ -1,12 +1,8 @@
-import { LoginResponse } from './../interfaces/interfaces';
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Credentials } from '../interfaces/interfaces';
-import { UtilsService } from './utils.service';
-import { NavController } from '@ionic/angular';
-import { resolve } from 'url';
+import { LoginResponse, UserLogin, UserRegister } from './../interfaces/interfaces';
 
 const URL = environment.url;
 const { Storage } = Plugins;
@@ -20,17 +16,34 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  login(credentials: Credentials) {
+  login(credentials: UserLogin) {
     return new Promise(resolve => {
       this.http.post<LoginResponse>(`${URL}/user/login`, credentials).subscribe(response => {
         if (response.success) {
-          this.saveToken(response.data.token).then((data) => console.log(data)).catch(erro => console.log(erro));
+          this.saveToken(response.data.token);
           resolve(true);
         } else {
+          this.token = null;
+          Storage.clear();
           resolve(false);
         }
       });
     });
+  }
+
+  registerUser(registerForm: UserRegister) {
+    return new Promise(resolve => {
+      this.http.post<LoginResponse>(`${URL}/user/create`, registerForm).subscribe(response => {
+        if (response.success) {
+          this.token = response.data.token;
+          resolve(true);
+        } else {
+          this.token = null;
+          Storage.clear();
+          resolve(false);
+        }
+      });
+    })
   }
 
   async saveToken(token: string) {

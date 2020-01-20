@@ -68,30 +68,28 @@
           </ion-col>
         </ion-row>
       
-        <form (ngSubmit)="register(registerForm)" #registerForm="ngForm">
+        <form (ngSubmit)="register()" [formGroup]="registerForm">
           <ion-row>
             <ion-col>
               <ion-list> 
                 <ion-item>
                   <ion-label>Correo</ion-label>
-                  <ion-input name="email" 
-                             type="email"
-                             required></ion-input>
+                  <ion-input formControlName="email" 
+                             type="email">
+                  </ion-input>
                 </ion-item>
 
                 <ion-item>
                   <ion-label>Nombre</ion-label>
-                  <ion-input name="nombre"
-                             type="text"
-                             required>
+                  <ion-input formControlName="name" 
+                             type="text">
                   </ion-input>
                 </ion-item>
 
                 <ion-item>
                   <ion-label>Contraseña</ion-label>
-                  <ion-input name="password"
-                             type="password"
-                             required>
+                  <ion-input formControlName="password"
+                             type="password">
                   </ion-input>
                 </ion-item>
               </ion-list>
@@ -100,12 +98,12 @@
             
           <ion-row>
             <ion-col>
-                <ion-button [disabled]="registerForm.invalid"
-                            type="submit"
-                            color="tertiary"
-                            shape="round">
-                    Crear usuario
-                </ion-button>
+              <ion-button [disabled]="registerForm.invalid"
+                          type="submit"
+                          color="tertiary"
+                          shape="round">
+                Crear usuario
+              </ion-button>
             </ion-col>
           </ion-row>
           

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { IonSlides, NavController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -49,15 +49,13 @@ export class LoginPage implements OnInit {
     },
   ];
   loginForm: FormGroup;
+  registerForm: FormGroup;
 
   constructor(private userSrv: UserService, 
               private formBuilder: FormBuilder,
               private navCtrl: NavController,
               private utilsSrv: UtilsService) { 
-    this.loginForm = this.formBuilder.group({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    });
+    this.initForms();
   }
 
   ngOnInit() {
@@ -66,7 +64,6 @@ export class LoginPage implements OnInit {
 
   async login() {
     const valid = await this.userSrv.login(this.loginForm.getRawValue());
-    console.log(valid);
     if (valid) {
       this.navCtrl.navigateRoot('/main/tabs/tab1', { animated: true });
     } else {
@@ -74,8 +71,13 @@ export class LoginPage implements OnInit {
     }
   }
 
-  register(registerForm: NgForm) {
-
+  async register() {
+    const valid = await this.userSrv.registerUser(this.registerForm.getRawValue());
+    if (valid) {
+      this.navCtrl.navigateRoot('/main/tabs/tab1', { animated: true });
+    } else {
+      this.utilsSrv.createToast('Correo en uso');
+    }
   }
 
   showRegister() {
@@ -95,5 +97,20 @@ export class LoginPage implements OnInit {
   selectAvatar(avatar) {
     this.avatars.forEach(av => av.selected = false);
     avatar.selected = true;
+    this.registerForm.get('avatar').setValue(avatar.img);
+  }
+
+  initForms() {
+    this.loginForm = this.formBuilder.group({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)])
+    });
+
+    this.registerForm = this.formBuilder.group({
+      avatar: new FormControl('av-1.png'),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      name: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)])
+    });
   }
 }

@@ -35,7 +35,14 @@ export interface Usuario {
   nombre: string;
   email: string;
 }
-export interface Credentials {
+export interface UserLogin {
+  email: string;
+  password: string;
+}
+
+export interface UserRegister {
+  avatar: string;
+  name: string;
   email: string;
   password: string;
 }
