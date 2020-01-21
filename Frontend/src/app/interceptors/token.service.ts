@@ -1,19 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpHeaders, HttpErrorResponse } from '@angular/common/http'
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError, from } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
 
 @Injectable({ providedIn: 'root' })
 export class TokenService implements HttpInterceptor {
 
-  token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7Il9pZCI6IjVkOTU2OTMxYmZlNDQ2MTVkYzI0ZmM4MiIsIm5vbWJyZSI6Ikp1YW4gT3NvcmlvIiwiZW1haWwiOiJqdWFuQGdtYWlsLmNvbSIsImF2YXRhciI6ImF2Mi5wbmcifSwiaWF0IjoxNTc5NDAyMTEwLCJleHAiOjE1Nzk0ODg1MTB9.Qtbzto8He9AnUUMmEJtS2ED_iBCdnHgAw6N4ehqe-ho';
-
   constructor() { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const headers = new HttpHeaders({'x-token': this.token });
-    const cloneRequest = req.clone({ headers });
-    return next.handle(cloneRequest).pipe(catchError(this.errorHandler));
+    return from(Storage.get({key: 'token'})).pipe(map(token => token.value)).pipe(switchMap(token => {
+      if (token){
+        const headers = new HttpHeaders({'x-token': token });
+        const cloneRequest = req.clone({ headers });
+        return next.handle(cloneRequest).pipe(catchError(this.errorHandler));
+      } else {
+        const cloneRequest = req.clone();
+        return next.handle(cloneRequest).pipe(catchError(this.errorHandler));
+      }
+    }));
   }
 
   errorHandler(error: HttpErrorResponse) {
