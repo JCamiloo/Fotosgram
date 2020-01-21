@@ -11,6 +11,10 @@ export interface PostResponse extends Response{
   data: PostData;
 }
 
+export interface CheckTokenResponse extends Response {
+  data: User;
+}
+
 export interface LoginData {
   token: string;
 }
@@ -25,13 +29,13 @@ export interface Post {
   _id: string;
   coords: string[];
   mensaje: string;
-  usuario: Usuario;
+  usuario: User;
   created: string;
 }
 
-export interface Usuario {
-  avatar: string;
+export interface User {
   _id: string;
+  avatar: string;
   nombre: string;
   email: string;
 }

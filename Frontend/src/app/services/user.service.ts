@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { LoginResponse, UserLogin, UserRegister } from './../interfaces/interfaces';
+import { LoginResponse, UserLogin, UserRegister, User, CheckTokenResponse } from './../interfaces/interfaces';
+import { NavController } from '@ionic/angular';
 
 const URL = environment.url;
 const { Storage } = Plugins;
@@ -13,8 +14,9 @@ const { Storage } = Plugins;
 export class UserService {
 
   token: string = null;
+  user: Partial<User> = {}
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private navCtrl: NavController) { }
 
   login(credentials: UserLogin) {
     return new Promise(resolve => {
@@ -49,5 +51,33 @@ export class UserService {
   async saveToken(token: string) {
     this.token = token;
     await Storage.set({ key: 'token', value: this.token });
+  }
+
+  async checkToken(): Promise<boolean> {
+    await this.loadToken();
+
+    if (!this.token) {
+      this.navCtrl.navigateRoot('/login');
+      return Promise.resolve(false);
+    }
+
+    return new Promise<boolean>(resolve => {
+      const headers = new HttpHeaders({ 'x-token': this.token });
+      this.http.get<CheckTokenResponse>(`${URL}/user/`, { headers }).subscribe(response => {
+        if (response.success) {
+          this.user = response.data;
+          resolve(true);
+        } else {
+          this.user = {};
+          this.navCtrl.navigateRoot('/login');
+          resolve(false);
+        }
+      })
+    });
+  }
+
+  async loadToken() {
+    const { value } = await Storage.get({ key: 'token' }) || null;
+    this.token = value;
   }
 }
