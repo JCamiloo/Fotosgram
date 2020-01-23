@@ -14,7 +14,7 @@ const { Storage } = Plugins;
 export class UserService {
 
   token: string = null;
-  user: Partial<User> = {}
+  private user: Partial<User> = {}
 
   constructor(private http: HttpClient, private navCtrl: NavController) { }
 
@@ -74,6 +74,13 @@ export class UserService {
         }
       })
     });
+  }
+
+  getUsuario() {
+    if(!this.user._id) {
+      this.checkToken();
+    }
+    return { ...this.user };
   }
 
   async loadToken() {
