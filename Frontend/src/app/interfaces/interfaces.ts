@@ -15,6 +15,10 @@ export interface CheckTokenResponse extends Response {
   data: User;
 }
 
+export interface UpdateUserResponse extends Response {
+  data: string;
+}
+
 export interface LoginData {
   token: string;
 }

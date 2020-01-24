@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { LoginResponse, UserLogin, UserRegister, User, CheckTokenResponse } from './../interfaces/interfaces';
+import { LoginResponse, UserLogin, UserRegister, User, CheckTokenResponse, UpdateUserResponse } from './../interfaces/interfaces';
 import { NavController } from '@ionic/angular';
 
 const URL = environment.url;
@@ -46,6 +46,19 @@ export class UserService {
         }
       });
     })
+  }
+
+  updateUser(user: User) {
+    return new Promise(resolve => {
+      this.http.post<UpdateUserResponse>(`${URL}/user/update`, user).subscribe(response => {
+        if (response.success) {
+          this.saveToken(response.data);
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
   }
 
   async saveToken(token: string) {

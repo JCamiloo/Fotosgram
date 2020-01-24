@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/interfaces/interfaces';
 import { UserService } from 'src/app/services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-tab3',
@@ -12,9 +13,13 @@ export class Tab3Page implements OnInit{
 
   user: Partial<User> = {};
   updateForm: FormGroup;
+  avatar: string;
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder) {
+  constructor(private userService: UserService, 
+              private formBuilder: FormBuilder,
+              private utilsService: UtilsService) {
     this.updateForm = this.formBuilder.group({
+      avatar: ['av-1.png'],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]]
     });
@@ -22,12 +27,22 @@ export class Tab3Page implements OnInit{
 
   ngOnInit() {
     this.user = this.userService.getUsuario();
+    this.avatar = this.user.avatar;
     this.updateForm.patchValue({ name: this.user.nombre, email: this.user.email });
-    console.log(this.user);
   }
 
-  updateProfile() {
-    
+  async updateProfile() {
+    const updated = await this.userService.updateUser(this.updateForm.getRawValue());
+    if (updated) {
+      this.utilsService.createToast('Usuario actualizado');
+    } else {
+      this.utilsService.createToast('No se pudo actualizar el usuario');
+    }
+  }
+
+  avatarChanged(event: string) {
+    console.log(event);
+    this.updateForm.get('avatar').setValue(event);
   }
 
   logout() {
