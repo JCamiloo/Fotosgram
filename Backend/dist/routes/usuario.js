@@ -14,7 +14,7 @@ userRoutes.get('/', authentication_1.checkToken, (req, res) => {
     const user = req.usuario;
     res.json({
         success: true,
-        data: { user }
+        data: user
     });
 });
 //Login user
@@ -92,8 +92,15 @@ userRoutes.post('/update', authentication_1.checkToken, (req, res) => {
                 message: 'User does not exist.'
             });
         }
+        const tokenUser = token_1.default.getJwtToken({
+            _id: userDB._id,
+            nombre: userDB.nombre,
+            email: userDB.email,
+            avatar: userDB.avatar
+        });
         res.json({
             success: true,
+            data: tokenUser,
             message: 'User updated'
         });
     });

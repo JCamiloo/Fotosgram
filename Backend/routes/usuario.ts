@@ -1,4 +1,4 @@
-import { Usuario } from './../models/usuario.model';
+import { Usuario } from '../models/usuario.model';
 import { Router, Request, Response } from "express";
 import bcrypt from 'bcrypt'; 
 import Token from '../classes/token';
@@ -11,7 +11,7 @@ userRoutes.get('/', checkToken, (req: any, res: Response) => {
     const user = req.usuario;
     res.json({
         success: true,
-        data: { user }
+        data: user 
     });
 });
 
@@ -98,8 +98,16 @@ userRoutes.post('/update', checkToken, (req: any, res: Response) => {
             });
         }
 
+        const tokenUser = Token.getJwtToken({
+            _id: userDB._id,
+            nombre: userDB.nombre,
+            email: userDB.email,
+            avatar: userDB.avatar
+        });
+
         res.json({
             success: true,
+            data: tokenUser,
             message: 'User updated'
         });
     });
