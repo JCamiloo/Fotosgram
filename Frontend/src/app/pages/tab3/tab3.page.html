@@ -26,7 +26,9 @@
     </ion-col>
   </ion-row>
 
-  <app-avatar-selector (avatarSelected)="avatarChanged($event)"></app-avatar-selector>
+  <app-avatar-selector (avatarSelected)="avatarChanged($event)"
+                       [currentAvatar]="avatar">
+  </app-avatar-selector>
 
   <form [formGroup]="updateForm" (ngSubmit)="updateProfile()">
     <ion-row>

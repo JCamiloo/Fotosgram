@@ -41,8 +41,8 @@ export class Tab3Page implements OnInit{
   }
 
   avatarChanged(event: string) {
-    console.log(event);
     this.updateForm.get('avatar').setValue(event);
+    this.avatar = event;
   }
 
   logout() {

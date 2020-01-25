@@ -52,7 +52,7 @@ export class UserService {
     return new Promise(resolve => {
       this.http.post<UpdateUserResponse>(`${URL}/user/update`, user).subscribe(response => {
         if (response.success) {
-          this.saveToken(response.data);
+          this.saveToken(response.data).then(() => this.loadToken());
           resolve(true);
         } else {
           resolve(false);
