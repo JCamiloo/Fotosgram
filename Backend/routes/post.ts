@@ -9,33 +9,30 @@ const fileSystem = new FileSystem();
 
 //Get POST
 postRoutes.get('/', checkToken, async (req: any, res: Response) => {
-    const pagina = Number(req.query.pagina) || 1;
-    const skip = (pagina - 1) * 10;
+    const page = Number(req.query.page) || 1;
+    const skip = (page - 1) * 10;
 
-    const post = await Post.find()
+    const posts = await Post.find()
                            .sort({ _id: -1})
                            .skip(skip)
                            .limit(10)
-                           .populate('usuario', '-password')
+                           .populate('user', '-password')
                            .exec();
     res.json({
         success: true,
-        data: {
-            page: pagina,
-            posts: post
-        }
+        data: { page, posts }
     });
 });
 
 //Create POST
 postRoutes.post('/', checkToken, (req: any, res: Response) => {
     const body = req.body;
-    body.usuario = req.usuario._id;
-    const images = fileSystem.tempToPostImages(req.usuario._id);
+    body.user = req.user._id;
+    const images = fileSystem.tempToPostImages(req.user._id);
     body.imgs = images;
 
     Post.create(body).then(async postDB => {
-        await postDB.populate('usuario', '-password').execPopulate();
+        await postDB.populate('user', '-password').execPopulate();
         res.json({
             success: true,
             data: postDB 
@@ -53,7 +50,7 @@ postRoutes.post('/upload', checkToken, async (req: any, res: Response) => {
     if (!req.files) {
         return res.status(400).json({
             success: false,
-            message: 'No file uploaded'
+            message: 'No se cargó la imagen'
         });
     }
 
@@ -63,18 +60,18 @@ postRoutes.post('/upload', checkToken, async (req: any, res: Response) => {
     if (!file) {
         return res.status(400).json({
             success: false,
-            message: 'No file detected'
+            message: 'Imagen no detectada'
         });
     }
 
     if (!file.mimetype.includes('image')) {
         return res.status(400).json({
             success: false,
-            message: 'No image detected'
+            message: 'Imagen no detectada'
         });
     }
 
-    await fileSystem.saveTempImage(file, req.usuario._id);
+    await fileSystem.saveTempImage(file, req.user._id);
     
     res.json({
         success: true,

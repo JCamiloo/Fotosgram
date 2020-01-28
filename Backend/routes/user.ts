@@ -1,4 +1,4 @@
-import { Usuario } from '../models/usuario.model';
+import { User } from '../models/user.model';
 import { Router, Request, Response } from "express";
 import bcrypt from 'bcrypt'; 
 import Token from '../classes/token';
@@ -8,7 +8,7 @@ const userRoutes = Router();
 
 //Check user
 userRoutes.get('/', checkToken, (req: any, res: Response) => {
-    const user = req.usuario;
+    const user = req.user;
     res.json({
         success: true,
         data: user 
@@ -18,20 +18,20 @@ userRoutes.get('/', checkToken, (req: any, res: Response) => {
 //Login user
 userRoutes.post('/login', (req: Request, res: Response) => {
     const body = req.body;
-    Usuario.findOne({ email: body.email }, (err, userDB) => {
+    User.findOne({ email: body.email }, (err, userDB) => {
         if (err) throw err;
 
         if (!userDB){
             return res.json({
                 success: false,
-                message: 'User/password invalids'
+                message: 'Usuario/Contraseña inválidas'
             });
         }
 
         if(userDB.comparePassword(body.password)){
             const tokenUser = Token.getJwtToken({
                 _id: userDB._id,
-                nombre: userDB.nombre,
+                name: userDB.name,
                 email: userDB.email,
                 avatar: userDB.avatar
             });
@@ -43,7 +43,7 @@ userRoutes.post('/login', (req: Request, res: Response) => {
         } else {
             res.json({
                 success: false,
-                message: 'User/password invalids*'
+                message: 'Usuario/Contraseña inválidas'
             });
         }
     });
@@ -52,24 +52,24 @@ userRoutes.post('/login', (req: Request, res: Response) => {
 //Create user
 userRoutes.post('/create', (req: Request, res: Response) => {
     const user = {
-        nombre: req.body.nombre, 
+        name: req.body.name, 
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 10),
         avatar: req.body.avatar
     }
 
-    Usuario.create(user).then(userDB => {
+    User.create(user).then(userDB => {
         const tokenUser = Token.getJwtToken({
             _id: userDB._id,
-            nombre: userDB.nombre,
+            nombre: userDB.name,
             email: userDB.email,
             avatar: userDB.avatar
         });
 
         res.json({
             success: true,
-            message: 'User created',
-            data: { token: tokenUser}
+            message: 'Usuario creado',
+            data: tokenUser
         });
     }).catch(err => {
         res.json({
@@ -83,24 +83,24 @@ userRoutes.post('/create', (req: Request, res: Response) => {
 userRoutes.post('/update', checkToken, (req: any, res: Response) => {
 
     const user = {
-        nombre: req.body.name   || req.usuario.nombre,
-        email: req.body.email   || req.usuario.email,
-        avatar: req.body.avatar || req.usuario.avatar
+        name: req.body.name   || req.user.name,
+        email: req.body.email   || req.user.email,
+        avatar: req.body.avatar || req.user.avatar
     }
 
-    Usuario.findByIdAndUpdate(req.usuario._id, user, {new: true}, (err, userDB) => {
+    User.findByIdAndUpdate(req.user._id, user, {new: true}, (err, userDB) => {
         if(err) throw err;
 
         if(!userDB){
             return res.json({
                 success: false,
-                message: 'User does not exist.'
+                message: 'El usuario no existe'
             });
         }
 
         const tokenUser = Token.getJwtToken({
             _id: userDB._id,
-            nombre: userDB.nombre,
+            name: userDB.name,
             email: userDB.email,
             avatar: userDB.avatar
         });
@@ -108,7 +108,7 @@ userRoutes.post('/update', checkToken, (req: any, res: Response) => {
         res.json({
             success: true,
             data: tokenUser,
-            message: 'User updated'
+            message: 'Usuario actualizado'
         });
     });
 });

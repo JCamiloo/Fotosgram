@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class Token {
     static getJwtToken(payload) {
-        return jsonwebtoken_1.default.sign({ usuario: payload }, this.seed, { expiresIn: this.expiration });
+        return jsonwebtoken_1.default.sign({ user: payload }, this.seed, { expiresIn: this.expiration });
     }
     static verifyToken(userToken) {
         return new Promise((resolve, reject) => {

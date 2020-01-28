@@ -7,12 +7,13 @@ const token_1 = __importDefault(require("../classes/token"));
 exports.checkToken = (req, res, next) => {
     const userToken = req.get('x-token') || '';
     token_1.default.verifyToken(userToken).then((decoded) => {
-        req.usuario = decoded.usuario;
+        req.user = decoded.user;
         next();
     }).catch(err => {
+        res.status(401);
         res.json({
             success: false,
-            message: 'Invalid token'
+            message: 'Token inválido'
         });
     });
 };

@@ -5,7 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 
-import userRoutes from "./routes/usuario";
+import userRoutes from "./routes/user";
 import postRoutes from "./routes/post";
 
 const server = new Server();

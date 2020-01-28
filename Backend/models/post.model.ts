@@ -2,12 +2,12 @@ import { Schema, Document, model } from 'mongoose';
 
 const postSchema = new Schema({
     created: { type: Date },
-    mensaje: { type: String },
+    message: { type: String },
     imgs: [{ type: String }],
     coords: [{ type: String }],
-    usuario: { 
+    user: { 
         type: Schema.Types.ObjectId,
-        ref: 'Usuario',
+        ref: 'User',
         required: [ true, 'Debe de existir una referencia a un usuario']
     }
 });
@@ -19,10 +19,10 @@ postSchema.pre<IPost>('save', function(next){
 
 interface IPost extends Document {
     created: Date;
-    mensaje: string;
+    message: string;
     img: string[];
     coords: string;
-    usuario: string;
+    user: string;
 }
 
 export const Post = model<IPost>('Post', postSchema);

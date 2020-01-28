@@ -6,7 +6,7 @@ export default class Token {
     private static expiration: string = '1d';
 
     static getJwtToken(payload: any): string {
-        return jwt.sign({ usuario: payload }, this.seed, { expiresIn: this.expiration });
+        return jwt.sign({ user: payload }, this.seed, { expiresIn: this.expiration });
     }
 
     static verifyToken(userToken: string) {
