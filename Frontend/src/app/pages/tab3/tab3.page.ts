@@ -28,7 +28,7 @@ export class Tab3Page implements OnInit{
   ngOnInit() {
     this.user = this.userService.getUsuario();
     this.avatar = this.user.avatar;
-    this.updateForm.patchValue({ name: this.user.nombre, email: this.user.email });
+    this.updateForm.patchValue({ name: this.user.name, email: this.user.email });
   }
 
   async updateProfile() {

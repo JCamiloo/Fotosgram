@@ -5,7 +5,7 @@ interface Response {
 }
 
 export interface LoginResponse extends Response {
-  data: LoginData;
+  data: string;
 }
 export interface PostResponse extends Response{
   data: PostData;
@@ -13,14 +13,6 @@ export interface PostResponse extends Response{
 
 export interface CheckTokenResponse extends Response {
   data: User;
-}
-
-export interface UpdateUserResponse extends Response {
-  data: string;
-}
-
-export interface LoginData {
-  token: string;
 }
 
 export interface PostData {
@@ -32,15 +24,15 @@ export interface Post {
   imgs: string[];
   _id: string;
   coords: string[];
-  mensaje: string;
-  usuario: User;
+  message: string;
+  user: User;
   created: string;
 }
 
 export interface User {
   _id: string;
   avatar: string;
-  nombre: string;
+  name: string;
   email: string;
 }
 export interface UserLogin {

@@ -1,12 +1,12 @@
 <div class="post">
   <ion-item lines="none">
     <ion-avatar slot="start">
-      <img src="/assets/avatars/{{ post.usuario.avatar }}">
+      <img src="/assets/avatars/{{ post.user.avatar }}">
     </ion-avatar>
 
     <ion-label>
-      <h3> {{ post.usuario.nombre }} </h3>
-      <h5> {{ post.usuario.email }} </h5>
+      <h3> {{ post.user.name }} </h3>
+      <h5> {{ post.user.email }} </h5>
     </ion-label>
   </ion-item>
 
@@ -30,7 +30,7 @@
 
   <ion-item lines="none">
     <ion-label class="ion-text-wrap">
-      {{ post.mensaje }}
+      {{ post.message }}
     </ion-label>
   </ion-item>
 </div>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { LoginResponse, UserLogin, UserRegister, User, CheckTokenResponse, UpdateUserResponse } from './../interfaces/interfaces';
+import { LoginResponse, UserLogin, UserRegister, User, CheckTokenResponse } from './../interfaces/interfaces';
 import { NavController } from '@ionic/angular';
 
 const URL = environment.url;
@@ -22,7 +22,7 @@ export class UserService {
     return new Promise(resolve => {
       this.http.post<LoginResponse>(`${URL}/user/login`, credentials).subscribe(response => {
         if (response.success) {
-          this.saveToken(response.data.token);
+          this.saveToken(response.data);
           resolve(true);
         } else {
           this.token = null;
@@ -37,7 +37,7 @@ export class UserService {
     return new Promise(resolve => {
       this.http.post<LoginResponse>(`${URL}/user/create`, registerForm).subscribe(response => {
         if (response.success) {
-          this.token = response.data.token;
+          this.token = response.data;
           resolve(true);
         } else {
           this.token = null;
@@ -50,7 +50,7 @@ export class UserService {
 
   updateUser(user: User) {
     return new Promise(resolve => {
-      this.http.post<UpdateUserResponse>(`${URL}/user/update`, user).subscribe(response => {
+      this.http.post<LoginResponse>(`${URL}/user/update`, user).subscribe(response => {
         if (response.success) {
           this.saveToken(response.data).then(() => this.loadToken());
           resolve(true);
@@ -99,5 +99,10 @@ export class UserService {
   async loadToken() {
     const { value } = await Storage.get({ key: 'token' }) || null;
     this.token = value;
+  }
+
+  logout() {
+    Storage.clear();
+    this.navCtrl.navigateRoot('/login')
   }
 }
