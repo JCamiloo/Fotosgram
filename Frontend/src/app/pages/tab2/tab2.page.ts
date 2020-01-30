@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Post } from 'src/app/interfaces/interfaces';
-import { UserService } from 'src/app/services/user.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PostService } from 'src/app/services/post.service';
 
 @Component({
   selector: 'app-tab2',
@@ -10,19 +9,18 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class Tab2Page {
 
-  post: Partial<Post> = {};
+  post: Partial<Post> = {
+    message: '',
+    coords: null,
+  };
+  position: false;
   tempImages: string[] = [];
-  postForm: FormGroup;
 
-  constructor(private userSrv: UserService, private formBuilder: FormBuilder) {
-    this.postForm = this.formBuilder.group({
-      message: ['', Validators.required],
-      coords: [null],
-      position: [false]
-    });
+  constructor(private postSrv: PostService) {
+  
   }
 
   createPost() {
-    console.log(this.postForm.getRawValue());
+    this.postSrv.createPost(this.post);
   }
 }

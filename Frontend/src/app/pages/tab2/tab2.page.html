@@ -6,6 +6,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="createPost()"
+                  [disabled]="post.message.trim().length < 1"
                   color="primary">
         Compartir
       </ion-button>
@@ -15,11 +16,11 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="postForm" (ngSubmit)="createPost()">
+  <form (ngSubmit)="createPost()">
     <ion-list>
       <ion-item>
         <ion-label position="floating">Mensaje</ion-label>
-        <ion-textarea formControlName="message"></ion-textarea>
+        <ion-textarea name="message" [(ngModel)]="post.message"></ion-textarea>
       </ion-item>
   
       <ion-list>

@@ -1,4 +1,4 @@
-import { PostResponse } from './../interfaces/interfaces';
+import { PostResponse, Post } from './../interfaces/interfaces';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
@@ -20,5 +20,9 @@ export class PostService {
     }
     this.postPages++;
     return this.http.get<PostResponse>(`${URL}/post/?page=${this.postPages}`)
+  }
+
+  createPost(post: Partial<Post>) {
+    this.http.post(`${URL}/post`, post).subscribe(resp => console.log(resp));
   }
 }
