@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Post } from 'src/app/interfaces/interfaces';
 import { PostService } from 'src/app/services/post.service';
+import { NavController } from '@ionic/angular';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-tab2',
@@ -16,11 +18,11 @@ export class Tab2Page {
   position: false;
   tempImages: string[] = [];
 
-  constructor(private postSrv: PostService) {
-  
-  }
+  constructor(private postSrv: PostService, private UtilsSrv: UtilsService) {}
 
-  createPost() {
-    this.postSrv.createPost(this.post);
+  async createPost() {
+    await this.postSrv.createPost(this.post);
+    this.post = { message: '', coords: null };
+    this.UtilsSrv.createToast('Post creado!');
   }
 }

@@ -7,7 +7,12 @@ interface Response {
 export interface LoginResponse extends Response {
   data: string;
 }
+
 export interface PostResponse extends Response{
+  data: Post;
+}
+
+export interface PostsResponse extends Response{
   data: PostData;
 }
 
