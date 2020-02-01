@@ -4,7 +4,7 @@ const postSchema = new Schema({
     created: { type: Date },
     message: { type: String },
     imgs: [{ type: String }],
-    coords: [{ type: String }],
+    coords: { type: String },
     user: { 
         type: Schema.Types.ObjectId,
         ref: 'User',

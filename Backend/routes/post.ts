@@ -13,7 +13,7 @@ postRoutes.get('/', checkToken, async (req: any, res: Response) => {
     const skip = (page - 1) * 10;
 
     const posts = await Post.find()
-                           .sort({ _id: -1})
+                           .sort({ _id: -1 })
                            .skip(skip)
                            .limit(10)
                            .populate('user', '-password')

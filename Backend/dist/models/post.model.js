@@ -5,7 +5,7 @@ const postSchema = new mongoose_1.Schema({
     created: { type: Date },
     message: { type: String },
     imgs: [{ type: String }],
-    coords: [{ type: String }],
+    coords: { type: String },
     user: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
