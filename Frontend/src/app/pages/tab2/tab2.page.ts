@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { Post } from 'src/app/interfaces/interfaces';
 import { PostService } from 'src/app/services/post.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { Plugins } from '@capacitor/core';
+import { Plugins, CameraResultType, CameraSource, Capacitor, CameraOptions } from '@capacitor/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
-
-const { Geolocation } = Plugins;
+const { Geolocation, Camera } = Plugins;
 
 @Component({
   selector: 'app-tab2',
@@ -14,15 +14,14 @@ const { Geolocation } = Plugins;
 })
 export class Tab2Page {
 
-  post: Partial<Post> = {
-    message: '',
-    coords: null,
-  };
+  post: Partial<Post> = { message: '', coords: null };
   position: boolean = false;
   locationSpinner: boolean = false;
   tempImages: string[] = [];
 
-  constructor(private postSrv: PostService, private UtilsSrv: UtilsService) {}
+  constructor(private postSrv: PostService, 
+              private UtilsSrv: UtilsService,
+              private sanitizer: DomSanitizer) {}
 
   async createPost() {
     await this.postSrv.createPost(this.post);
@@ -41,5 +40,21 @@ export class Tab2Page {
       this.post.coords = coordinates;
       this.locationSpinner = false;
     }).catch(() => this.locationSpinner = false);
+  }
+
+  async takePicture() {
+    const cameraOptions: CameraOptions = {
+      quality: 60,
+      allowEditing: true,
+      resultType: CameraResultType.DataUrl,
+      saveToGallery: true,
+      correctOrientation: true,
+      source: CameraSource.Camera
+    };
+
+    Camera.getPhoto(cameraOptions).then(image => {
+      const img = Capacitor.convertFileSrc(image.dataUrl);
+      this.tempImages.push(img);
+    }).catch( error => console.log(error));
   }
 }
