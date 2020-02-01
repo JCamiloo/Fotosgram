@@ -13,7 +13,7 @@ const { Storage } = Plugins;
 })
 export class UserService {
 
-  token: string = null;
+  private token: string = null;
   private user: Partial<User> = {}
 
   constructor(private http: HttpClient, private navCtrl: NavController) { }
@@ -75,8 +75,7 @@ export class UserService {
     }
 
     return new Promise<boolean>(resolve => {
-      const headers = new HttpHeaders({ 'x-token': this.token });
-      this.http.get<CheckTokenResponse>(`${URL}/user/`, { headers }).subscribe(response => {
+      this.http.get<CheckTokenResponse>(`${URL}/user/`).subscribe(response => {
         if (response.success) {
           this.user = response.data;
           resolve(true);
