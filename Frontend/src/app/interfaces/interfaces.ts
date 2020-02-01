@@ -28,7 +28,7 @@ export interface PostData {
 export interface Post {
   imgs: string[];
   _id: string;
-  coords: string[];
+  coords: string;
   message: string;
   user: User;
   created: string;

@@ -6,7 +6,8 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="createPost()"
-                  [disabled]="post.message.trim().length < 1"
+                  [disabled]="post.message.trim().length < 1 ||
+                              locationSpinner"
                   color="primary">
         Compartir
       </ion-button>
@@ -19,15 +20,19 @@
   <form (ngSubmit)="createPost()">
     <ion-list>
       <ion-item>
-        <ion-label position="floating">Mensaje</ion-label>
+        <ion-label position="floating">
+          Mensaje
+        </ion-label>
         <ion-textarea name="message" [(ngModel)]="post.message"></ion-textarea>
       </ion-item>
   
       <ion-list>
         <ion-item>
           <ion-label>Posición actual</ion-label>
-          <ion-spinner name="lines-small"></ion-spinner>
-          <ion-toggle slot="end"></ion-toggle>
+          <ion-spinner *ngIf="locationSpinner" name="lines-small"></ion-spinner>
+          <ion-toggle slot="end" name="position" 
+                      [(ngModel)]="position" (ionChange)="getCurrentPosition()">
+          </ion-toggle>
         </ion-item>
       </ion-list>
     </ion-list>
