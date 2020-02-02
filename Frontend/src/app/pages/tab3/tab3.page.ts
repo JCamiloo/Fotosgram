@@ -25,8 +25,8 @@ export class Tab3Page implements OnInit{
     });
   }
 
-  ngOnInit() {
-    this.user = this.userService.getUsuario();
+  async ngOnInit() {
+    this.user = await this.userService.getUsuario();
     this.avatar = this.user.avatar;
     this.updateForm.patchValue({ name: this.user.name, email: this.user.email });
   }
@@ -46,6 +46,6 @@ export class Tab3Page implements OnInit{
   }
 
   logout() {
-    
+    this.userService.logout();
   }
 }

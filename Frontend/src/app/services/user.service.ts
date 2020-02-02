@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { LoginResponse, UserLogin, UserRegister, User, CheckTokenResponse } from './../interfaces/interfaces';
 import { NavController } from '@ionic/angular';
+import { PostService } from './post.service';
 
 const URL = environment.url;
 const { Storage } = Plugins;
@@ -16,13 +17,15 @@ export class UserService {
   private token: string = null;
   private user: Partial<User> = {}
 
-  constructor(private http: HttpClient, private navCtrl: NavController) { }
+  constructor(private http: HttpClient, 
+              private navCtrl: NavController, 
+              private postSrv: PostService) { }
 
   login(credentials: UserLogin) {
     return new Promise(resolve => {
-      this.http.post<LoginResponse>(`${URL}/user/login`, credentials).subscribe(response => {
+      this.http.post<LoginResponse>(`${URL}/user/login`, credentials).subscribe(async response => {
         if (response.success) {
-          this.saveToken(response.data);
+          await this.saveToken(response.data);
           resolve(true);
         } else {
           this.token = null;
@@ -64,6 +67,7 @@ export class UserService {
   async saveToken(token: string) {
     this.token = token;
     await Storage.set({ key: 'token', value: this.token });
+    await this.checkToken();
   }
 
   async checkToken(): Promise<boolean> {
@@ -88,9 +92,9 @@ export class UserService {
     });
   }
 
-  getUsuario() {
+  async getUsuario() {
     if(!this.user._id) {
-      this.checkToken();
+      await this.checkToken();
     }
     return { ...this.user };
   }
@@ -102,6 +106,7 @@ export class UserService {
 
   logout() {
     Storage.clear();
+    this.postSrv.postPages = 0;
     this.navCtrl.navigateRoot('/login')
   }
 }
