@@ -10,7 +10,7 @@ class Server {
         this.app = express_1.default();
     }
     start() {
-        this.app.listen(this.port);
+        this.app.listen(process.env.PORT || this.port);
     }
 }
 exports.default = Server;

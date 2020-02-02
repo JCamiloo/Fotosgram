@@ -10,6 +10,6 @@ export default class Server {
     }
 
     start(){
-        this.app.listen(this.port);
+        this.app.listen(process.env.PORT || this.port);
     }
 }
