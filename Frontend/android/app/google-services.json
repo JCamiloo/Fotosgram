@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "863258741967",
+    "firebase_url": "https://fotosgram-5b576.firebaseio.com",
+    "project_id": "fotosgram-5b576",
+    "storage_bucket": "fotosgram-5b576.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863258741967:android:ea5e2c152d180a1e9cbbba",
+        "android_client_info": {
+          "package_name": "com.fotosgram.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863258741967-9vvjcjlrq90h9aeuh7btiaqqkmn9qtu6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgZEALy9_QZMmrkVxoYx1teALgHc66s-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863258741967-9vvjcjlrq90h9aeuh7btiaqqkmn9qtu6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

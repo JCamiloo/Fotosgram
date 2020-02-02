@@ -52,15 +52,15 @@ export class Tab2Page {
   executeCamera(cameraSource: CameraSource) {
     const cameraOptions: CameraOptions = {
       quality: 60,
-      allowEditing: true,
+      allowEditing: false,
       resultType: CameraResultType.DataUrl,
-      saveToGallery: true,
-      correctOrientation: true,
+      saveToGallery: false,
+      correctOrientation: false,
       source: cameraSource
     };
 
     Camera.getPhoto(cameraOptions).then(image => {
-      const img = Capacitor.convertFileSrc(image.dataUrl);
+      const img = Capacitor.convertFileSrc(image.dataUrl)
       this.tempImages.push(img);
       this.srcToFile(img, 'file.jpg', 'image/jpeg').then(image => {
         this.postSrv.loadImage(image);
