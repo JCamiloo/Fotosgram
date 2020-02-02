@@ -10,7 +10,21 @@
     </ion-label>
   </ion-item>
 
-  <app-map [coords]="post.coords"></app-map>
+  <ion-slides pager="true" *ngIf="post.imgs.length > 1">
+    <ion-slide *ngFor="let img of post.imgs"
+               class="image-slide"
+               [style]="(img | buildImage: post.user._id) | domSanitizer">
+    </ion-slide>
+  </ion-slides>
+
+  <ion-slides *ngIf="post.imgs.length === 1" [options]="slideOpts">
+    <ion-slide class="image-slide"
+               [style]="(post.imgs[0] | buildImage: post.user._id) | domSanitizer">
+    </ion-slide>
+  </ion-slides>
+
+  <app-map [coords]="post.coords" *ngIf="post.coords"></app-map>
+
   <ion-item lines="none">
     <ion-icon slot="start" name="heart-empty"></ion-icon>
     <ion-icon slot="end" name="bookmark"></ion-icon>
