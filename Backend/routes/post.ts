@@ -79,7 +79,7 @@ postRoutes.post('/upload', checkToken, async (req: any, res: Response) => {
     });
 });
 
-postRoutes.get('/image/:userId/:img', checkToken, (req: any, res: Response) => {
+postRoutes.get('/image/:userId/:img', (req: any, res: Response) => {
     const userId = req.params.userId;
     const img = req.params.img;
     const photoPath = fileSystem.getPhotoUrl(userId, img);

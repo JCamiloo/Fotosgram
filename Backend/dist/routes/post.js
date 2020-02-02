@@ -78,7 +78,7 @@ postRoutes.post('/upload', authentication_1.checkToken, (req, res) => __awaiter(
         file: file.mimetype
     });
 }));
-postRoutes.get('/image/:userId/:img', authentication_1.checkToken, (req, res) => {
+postRoutes.get('/image/:userId/:img', (req, res) => {
     const userId = req.params.userId;
     const img = req.params.img;
     const photoPath = fileSystem.getPhotoUrl(userId, img);
