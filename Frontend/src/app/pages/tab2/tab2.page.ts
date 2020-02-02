@@ -3,7 +3,6 @@ import { Post } from 'src/app/interfaces/interfaces';
 import { PostService } from 'src/app/services/post.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Plugins, CameraResultType, CameraSource, Capacitor, CameraOptions } from '@capacitor/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 const { Geolocation, Camera } = Plugins;
 
@@ -20,12 +19,12 @@ export class Tab2Page {
   tempImages: string[] = [];
 
   constructor(private postSrv: PostService, 
-              private UtilsSrv: UtilsService,
-              private sanitizer: DomSanitizer) {}
+              private UtilsSrv: UtilsService) {}
 
   async createPost() {
     await this.postSrv.createPost(this.post);
     this.post = { message: '', coords: null };
+    this.tempImages = [];
     this.UtilsSrv.createToast('Post creado!');
   }
 
@@ -42,19 +41,35 @@ export class Tab2Page {
     }).catch(() => this.locationSpinner = false);
   }
 
-  async takePicture() {
+  takePicture() {
+    this.executeCamera(CameraSource.Camera);
+  }
+
+  openGallery() {
+    this.executeCamera(CameraSource.Photos); 
+  }
+
+  executeCamera(cameraSource: CameraSource) {
     const cameraOptions: CameraOptions = {
       quality: 60,
       allowEditing: true,
       resultType: CameraResultType.DataUrl,
       saveToGallery: true,
       correctOrientation: true,
-      source: CameraSource.Camera
+      source: cameraSource
     };
 
     Camera.getPhoto(cameraOptions).then(image => {
       const img = Capacitor.convertFileSrc(image.dataUrl);
       this.tempImages.push(img);
+      this.srcToFile(img, 'file.jpg', 'image/jpeg').then(image => {
+        this.postSrv.loadImage(image);
+      });
     }).catch( error => console.log(error));
+  }
+
+  srcToFile(src, fileName, mimeType){
+    return (fetch(src).then(res => res.arrayBuffer())
+                      .then(buf => new File([buf], fileName, {type:mimeType})));
   }
 }

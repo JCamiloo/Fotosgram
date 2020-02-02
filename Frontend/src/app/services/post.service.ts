@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
-import { Post, PostsResponse, PostResponse } from './../interfaces/interfaces';
+import { Post, PostsResponse, PostResponse, LoginResponse } from './../interfaces/interfaces';
 import { EventEmitter } from '@angular/core';
 
 const URL = environment.url;
@@ -30,6 +30,18 @@ export class PostService {
         if (response.success) {
           this.newPost.emit(response.data);
           resolve();
+        }
+      });
+    });
+  }
+
+  loadImage(image: File) {
+    return new Promise(resolve => {
+      let data = new FormData();
+      data.append('image',image);
+      this.http.post<LoginResponse>(`${URL}/post/upload`, data).subscribe(data => {
+        if (data.success) {
+          resolve()
         }
       });
     });
