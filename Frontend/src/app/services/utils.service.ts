@@ -12,7 +12,7 @@ export class UtilsService {
 
   async createToast(message: string,
                     header: string = '',  
-                    position: toastPositions = 'bottom', 
+                    position: toastPositions = 'top', 
                     duration: number = 2000) {
     const toast = await this.toastCtrl.create({ header, message, position, duration });
     toast.present();
